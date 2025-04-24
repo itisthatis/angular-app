@@ -1,0 +1,90 @@
+<section class="table-page">
+    <div class="time-tracker" (click)="onUserAction()" >
+
+        <!-- Idle Overlay -->
+        <div *ngIf="isIdle" class="overlay"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-xs-12">
+                    
+                    <!-- Add Button -->
+                    <div class="add-user bg-dark mt-5">
+                        <button type="button" class="btn text-light btn-lg fw-semibold" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            <span><i class="bi bi-plus-lg"></i></span> Add User
+                        </button>
+                    </div>
+
+                 <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-light">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+                                        <div class="mb-3">
+                                            <label for="nameField" class="form-label">Enter Your Name</label>
+                                            <input type="text" class="form-control" id="nameField"
+                                                formControlName="name">
+                                            <div class="text-danger"
+                                                *ngIf="formData.get('name')?.hasError('required') && formData.get('name')?.touched">
+                                                *Name is required</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="ageField" class="form-label">Enter Your Age</label>
+                                            <input type="number" class="form-control" id="ageField"
+                                                formControlName="age">
+                                            <div class="text-danger"
+                                                *ngIf="formData.get('age')?.hasError('required') && formData.get('age')?.touched">
+                                                *Age is required</div>
+                                        </div>
+
+                                        <button type="button" class="btn text-dark me-2"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-dark" [disabled]="!formData.valid"
+                                            data-bs-dismiss="modal">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table  -->
+                    <div class="table-section mt-5" *ngIf="data.length > 0">
+                        <table class="table table-hover border text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-light bg-dark">S.No</th>
+                                    <th scope="col" class="text-light bg-dark">Name</th>
+                                    <th scope="col" class="text-light bg-dark">Age</th>
+                                    <th scope="col" class="text-light bg-dark">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let user of data; let i = index">
+                                <tr>
+                                    <th scope="row">{{i + 1}}</th>
+                                    <td>{{user.name | titlecase}}</td>
+                                    <td>{{user.age}}</td>
+                                    <td><button type="button" class="btn btn-dark" (click)="deleteUser(i)">
+                                        <span><i class="bi bi-trash3"></i></span></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="w-100">
+        <div class="footer-time">
+            <p class="mb-0"><strong>Session Time:</strong> {{ formatTime(sessionSeconds) }}</p>
+            <p class="mb-0"><strong>Active Time:</strong> {{ formatTime(activeSeconds) }}</p>
+        </div>
+    </footer>
+</section>
